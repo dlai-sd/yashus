@@ -1,0 +1,104 @@
+<div class="task-create">
+  <h2>Create New Task</h2>
+
+  <div class="form-container">
+    <form (ngSubmit)="createTask()">
+      <div class="form-group">
+        <label for="agentType">Agent Type</label>
+        <select id="agentType" [(ngModel)]="selectedAgentType" name="agentType" class="form-control">
+          <option *ngFor="let type of agentTypes" [value]="type.type">
+            {{ type.name }}
+          </option>
+        </select>
+        <div class="help-text" *ngIf="agentTypes.length > 0">
+          {{ agentTypes.find(t => t.type === selectedAgentType)?.description }}
+        </div>
+      </div>
+
+      <div class="form-section" *ngIf="selectedAgentType === 'sales_hunter'">
+        <h3>🎯 Sales Hunter Configuration</h3>
+        
+        <div class="form-group">
+          <label for="searchPhrase">Search Phrase *</label>
+          <input 
+            type="text" 
+            id="searchPhrase" 
+            [(ngModel)]="searchPhrase" 
+            name="searchPhrase"
+            class="form-control"
+            placeholder="e.g., restaurants, dentists, real estate agents"
+            required
+          />
+          <div class="help-text">
+            What type of businesses are you looking for?
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="location">Location *</label>
+          <input 
+            type="text" 
+            id="location" 
+            [(ngModel)]="location" 
+            name="location"
+            class="form-control"
+            placeholder="e.g., San Francisco, CA or 37.7749, -122.4194"
+            required
+          />
+          <div class="help-text">
+            City, address, or coordinates (lat, lng)
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="radius">Search Radius (meters)</label>
+            <input 
+              type="number" 
+              id="radius" 
+              [(ngModel)]="radius" 
+              name="radius"
+              class="form-control"
+              min="100"
+              max="50000"
+            />
+            <div class="help-text">
+              Default: 5000m (~3 miles)
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="maxResults">Maximum Results</label>
+            <input 
+              type="number" 
+              id="maxResults" 
+              [(ngModel)]="maxResults" 
+              name="maxResults"
+              class="form-control"
+              min="1"
+              max="100"
+            />
+            <div class="help-text">
+              Default: 20 results
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="error" class="alert alert-error">
+        {{ error }}
+      </div>
+
+      <div *ngIf="success" class="alert alert-success">
+        {{ success }}
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" [disabled]="loading">
+          <span *ngIf="!loading">🚀 Launch Agent</span>
+          <span *ngIf="loading">⏳ Creating Task...</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

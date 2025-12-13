@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: yashus-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: yashus
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - yashus-network
+
+  # Redis Cache & Message Broker
+  redis:
+    image: redis:7-alpine
+    container_name: yashus-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - yashus-network
+
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: yashus-backend
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@postgres:5432/yashus
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+      - SECRET_KEY=your-secret-key-change-in-production
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY:-}
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./backend:/app
+    networks:
+      - yashus-network
+
+  # Frontend (Angular)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: yashus-frontend
+    ports:
+      - "4200:4200"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - yashus-network
+
+networks:
+  yashus-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:

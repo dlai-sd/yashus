@@ -1,0 +1,70 @@
+<div class="dashboard">
+  <h2>Dashboard</h2>
+
+  <div *ngIf="loading" class="loading">Loading dashboard data...</div>
+
+  <div *ngIf="!loading" class="dashboard-content">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">🤖</div>
+        <div class="stat-value">{{ stats.totalAgents }}</div>
+        <div class="stat-label">Available Agents</div>
+      </div>
+
+      <div class="stat-card active">
+        <div class="stat-icon">⚡</div>
+        <div class="stat-value">{{ stats.activeTasks }}</div>
+        <div class="stat-label">Active Tasks</div>
+      </div>
+
+      <div class="stat-card success">
+        <div class="stat-icon">✅</div>
+        <div class="stat-value">{{ stats.completedTasks }}</div>
+        <div class="stat-label">Completed Tasks</div>
+      </div>
+
+      <div class="stat-card error">
+        <div class="stat-icon">❌</div>
+        <div class="stat-value">{{ stats.failedTasks }}</div>
+        <div class="stat-label">Failed Tasks</div>
+      </div>
+    </div>
+
+    <div class="recent-tasks">
+      <h3>Recent Tasks</h3>
+      <div *ngIf="recentTasks.length === 0" class="empty-state">
+        <p>No tasks yet. <a routerLink="/tasks/create">Create your first task</a></p>
+      </div>
+      <div *ngIf="recentTasks.length > 0" class="tasks-list">
+        <div *ngFor="let task of recentTasks" class="task-item">
+          <div class="task-info">
+            <strong>{{ task.agent_type }}</strong>
+            <span class="task-id">ID: {{ task.task_id }}</span>
+          </div>
+          <div class="task-meta">
+            <span class="status" [class]="task.status">{{ task.status }}</span>
+            <span class="date">{{ task.created_at | date:'short' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-actions">
+      <h3>Quick Actions</h3>
+      <div class="actions-grid">
+        <a routerLink="/tasks/create" class="action-button">
+          <span class="action-icon">➕</span>
+          <span class="action-text">Create New Task</span>
+        </a>
+        <a routerLink="/agents" class="action-button">
+          <span class="action-icon">📋</span>
+          <span class="action-text">View All Agents</span>
+        </a>
+        <a routerLink="/tasks/results" class="action-button">
+          <span class="action-icon">📊</span>
+          <span class="action-text">View Results</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

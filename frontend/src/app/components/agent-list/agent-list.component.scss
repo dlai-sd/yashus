@@ -1,0 +1,89 @@
+.agent-list {
+  h2 {
+    margin-bottom: 2rem;
+    color: #333;
+  }
+
+  .loading {
+    text-align: center;
+    padding: 3rem;
+    color: #666;
+  }
+}
+
+.agents-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2rem;
+}
+
+.agent-card {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+
+  .agent-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+
+    h3 {
+      margin: 0;
+      color: #667eea;
+    }
+
+    .version {
+      background: #e5e7eb;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      color: #666;
+    }
+  }
+
+  .description {
+    color: #666;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+
+  .capabilities {
+    margin-bottom: 1rem;
+
+    h4 {
+      margin: 0 0 0.5rem 0;
+      color: #333;
+      font-size: 0.95rem;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 1.5rem;
+      color: #666;
+      font-size: 0.9rem;
+
+      li {
+        margin-bottom: 0.25rem;
+      }
+    }
+  }
+
+  .agent-type {
+    padding-top: 1rem;
+    border-top: 1px solid #e5e7eb;
+    font-size: 0.9rem;
+    color: #666;
+
+    strong {
+      color: #333;
+    }
+  }
+}

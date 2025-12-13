@@ -1,0 +1,89 @@
+<div class="task-results">
+  <h2>Task Results</h2>
+
+  <div *ngIf="loading" class="loading">Loading tasks...</div>
+
+  <div *ngIf="!loading && tasks.length === 0" class="empty-state">
+    <p>No tasks found. Create your first task to get started!</p>
+  </div>
+
+  <div *ngIf="!loading && tasks.length > 0" class="results-container">
+    <div class="tasks-list">
+      <div *ngFor="let task of tasks" class="task-item" (click)="viewResult(task)">
+        <div class="task-info">
+          <strong>{{ task.agent_type }}</strong>
+          <span class="task-id">{{ task.task_id }}</span>
+        </div>
+        <div class="task-meta">
+          <span class="status" [class]="task.status">{{ task.status }}</span>
+          <span class="date">{{ task.created_at | date:'short' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="selectedTask" class="result-panel">
+      <div class="panel-header">
+        <h3>Task Details</h3>
+        <button class="close-btn" (click)="closeResult()">✕</button>
+      </div>
+
+      <div class="task-details">
+        <div class="detail-row">
+          <strong>Task ID:</strong>
+          <span>{{ selectedTask.task_id }}</span>
+        </div>
+        <div class="detail-row">
+          <strong>Agent Type:</strong>
+          <span>{{ selectedTask.agent_type }}</span>
+        </div>
+        <div class="detail-row">
+          <strong>Status:</strong>
+          <span class="status" [class]="selectedTask.status">{{ selectedTask.status }}</span>
+        </div>
+        <div class="detail-row">
+          <strong>Created:</strong>
+          <span>{{ selectedTask.created_at | date:'medium' }}</span>
+        </div>
+      </div>
+
+      <div *ngIf="loadingResult" class="loading">Loading result...</div>
+
+      <div *ngIf="!loadingResult && !selectedResult" class="info-message">
+        Task is still running. Please wait for completion.
+      </div>
+
+      <div *ngIf="selectedResult" class="result-data">
+        <h4>Results</h4>
+        <div *ngIf="selectedResult.result?.data?.leads" class="leads-section">
+          <p class="total-leads">
+            Found <strong>{{ selectedResult.result.data.total_found }}</strong> leads
+          </p>
+
+          <div class="leads-list">
+            <div *ngFor="let lead of selectedResult.result.data.leads" class="lead-card">
+              <h5>{{ lead.name }}</h5>
+              <p><strong>Address:</strong> {{ lead.address }}</p>
+              <p *ngIf="lead.phone"><strong>Phone:</strong> {{ lead.phone }}</p>
+              <p *ngIf="lead.email"><strong>Email:</strong> {{ lead.email }}</p>
+              <p *ngIf="lead.website"><strong>Website:</strong> <a [href]="lead.website" target="_blank">{{ lead.website }}</a></p>
+              <p *ngIf="lead.rating"><strong>Rating:</strong> {{ lead.rating }} ⭐</p>
+              <p *ngIf="lead.lead_score" class="score">
+                <strong>Lead Score:</strong> 
+                <span class="score-badge" [class.high]="lead.lead_score >= 80" [class.medium]="lead.lead_score >= 60 && lead.lead_score < 80">
+                  {{ lead.lead_score }}/100
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="raw-result">
+          <details>
+            <summary>View Raw Result</summary>
+            <pre>{{ selectedResult | json }}</pre>
+          </details>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

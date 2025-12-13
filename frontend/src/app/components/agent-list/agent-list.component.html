@@ -1,0 +1,24 @@
+<div class="agent-list">
+  <h2>Available Agents</h2>
+
+  <div *ngIf="loading" class="loading">Loading agents...</div>
+
+  <div *ngIf="!loading" class="agents-grid">
+    <div *ngFor="let agent of agents" class="agent-card">
+      <div class="agent-header">
+        <h3>{{ agent.name }}</h3>
+        <span class="version">v{{ agent.version }}</span>
+      </div>
+      <p class="description">{{ agent.description }}</p>
+      <div class="capabilities">
+        <h4>Capabilities:</h4>
+        <ul>
+          <li *ngFor="let capability of agent.capabilities">{{ capability }}</li>
+        </ul>
+      </div>
+      <div class="agent-type">
+        <strong>Type:</strong> {{ agent.agent_type }}
+      </div>
+    </div>
+  </div>
+</div>
