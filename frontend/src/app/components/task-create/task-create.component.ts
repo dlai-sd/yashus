@@ -75,10 +75,10 @@ export class TaskCreateComponent implements OnInit {
         this.loading = false;
         this.success = `Task created successfully! Task ID: ${response.task_id}`;
         
-        // Redirect to results after 2 seconds
+        // Navigate to results immediately to see progress
         setTimeout(() => {
           this.router.navigate(['/tasks/results']);
-        }, 2000);
+        }, 1500);
       },
       error: (error) => {
         this.loading = false;

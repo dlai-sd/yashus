@@ -15,6 +15,8 @@ An enterprise-grade agentic AI boilerplate for building autonomous marketing age
 - **Testing**: Comprehensive unit and integration tests
 - **Modern Stack**: Latest versions of Angular, Python, FastAPI
 
+> **⚠️ Development Note**: Current implementation uses in-memory storage for tasks (data lost on restart). For production, implement database-backed storage using PostgreSQL or MongoDB. See code comments for guidance.
+
 ## 📁 Project Structure
 
 ```

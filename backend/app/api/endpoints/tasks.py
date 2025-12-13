@@ -16,6 +16,8 @@ from app.agents.sales_hunter_agent import SalesHunterAgent
 router = APIRouter()
 
 # In-memory storage for demo (use database in production)
+# WARNING: Data will be lost on restart and does not scale across multiple instances
+# For production, implement database-backed storage (PostgreSQL, MongoDB, etc.)
 tasks: Dict[str, Dict[str, Any]] = {}
 
 
