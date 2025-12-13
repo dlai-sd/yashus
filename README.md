@@ -172,6 +172,10 @@ npm run test
 
 ## 🎯 Using the Sales Hunter Agent
 
+> **⚠️ Note**: The current implementation uses mock data for demonstration purposes. To use real data:
+> - Add your `GOOGLE_MAPS_API_KEY` to `.env` for Google Maps integration
+> - Implement web scraping with proper APIs (see code comments for examples)
+
 ### Via UI
 
 1. Navigate to http://localhost:4200

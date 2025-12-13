@@ -135,6 +135,21 @@ class SalesHunterAgent(BaseAgent):
         """
         Search Google Maps for businesses.
         
+        **NOTE: This is a PLACEHOLDER implementation**
+        In production, integrate with Google Places API:
+        https://developers.google.com/maps/documentation/places/web-service/search
+        
+        Example implementation:
+        ```python
+        import googlemaps
+        gmaps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
+        places = gmaps.places_nearby(
+            location=location,
+            radius=radius,
+            keyword=search_phrase
+        )
+        ```
+        
         Returns list of business leads with details.
         """
         # This is a placeholder implementation
@@ -148,7 +163,8 @@ class SalesHunterAgent(BaseAgent):
             await asyncio.sleep(0.5)
             
             # TODO: Implement actual Google Maps API integration
-            # For now, return mock data
+            # For now, return mock data for demonstration
+            self.logger.warning("Using mock data - Google Maps API not integrated")
             mock_leads = [
                 {
                     "source": "google_maps",
@@ -178,10 +194,28 @@ class SalesHunterAgent(BaseAgent):
         """
         Search the web for business leads using various sources.
         
+        **NOTE: This is a PLACEHOLDER implementation**
+        In production, implement proper web scraping with:
+        - Bing Web Search API
+        - Playwright/Selenium for JavaScript-rendered pages
+        - BeautifulSoup for HTML parsing
+        - Proper rate limiting and robots.txt compliance
+        
+        Example implementation:
+        ```python
+        from playwright.async_api import async_playwright
+        
+        async with async_playwright() as p:
+            browser = await p.chromium.launch()
+            page = await browser.new_page()
+            await page.goto(f"search_url?q={search_phrase}+{location}")
+            # Extract business data
+        ```
+        
         Returns list of business leads found on the web.
         """
         # This is a placeholder implementation
-        # In production, implement web scraping with proper rate limiting
+        # In production, implement actual web scraping with proper error handling
         
         try:
             # Simulate search delay
@@ -191,6 +225,7 @@ class SalesHunterAgent(BaseAgent):
             # Consider using Bing API, DuckDuckGo, or other search services
             # Always respect robots.txt and terms of service
             
+            self.logger.warning("Using mock data - Web scraping not implemented")
             mock_leads = [
                 {
                     "source": "web_search",
