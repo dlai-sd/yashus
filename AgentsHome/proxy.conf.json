@@ -1,4 +1,20 @@
 {
+  "/api/auth": {
+    "target": "http://localhost:8000",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api/auth": "/api/auth"
+    }
+  },
+  "/api/hunter": {
+    "target": "http://localhost:8001",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api/hunter": "/api"
+    }
+  },
   "/api": {
     "target": "http://localhost:8000",
     "secure": false,

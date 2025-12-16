@@ -1,0 +1,84 @@
+<div class="calculator-container">
+  <div class="calculator-card">
+    <div class="card-header">
+      <h1>The Hunter Calculator</h1>
+      <p class="subtitle">Autonomous Calculation Engine</p>
+    </div>
+
+    <div class="input-section">
+      <div class="input-group">
+        <label>First Number</label>
+        <input 
+          type="number" 
+          [(ngModel)]="operand1" 
+          placeholder="Enter first number"
+          class="input-field"
+        >
+      </div>
+
+      <div class="operation-select">
+        <label>Operation</label>
+        <select [(ngModel)]="operation" class="input-field">
+          <option value="add">Add (+)</option>
+          <option value="subtract">Subtract (-)</option>
+          <option value="multiply">Multiply (×)</option>
+          <option value="divide">Divide (÷)</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label>Second Number</label>
+        <input 
+          type="number" 
+          [(ngModel)]="operand2" 
+          placeholder="Enter second number"
+          class="input-field"
+        >
+      </div>
+    </div>
+
+    <button (click)="onCalculate()" class="calculate-button" [disabled]="loading">
+      <span *ngIf="!loading">CALCULATE</span>
+      <span *ngIf="loading">Processing...</span>
+    </button>
+
+    <div *ngIf="result !== null" class="result-section">
+      <div class="result-display">
+        <p class="result-label">Result</p>
+        <p class="result-value">{{ result | number:'1.0-2' }}</p>
+      </div>
+    </div>
+
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+    </div>
+
+    <div class="history-section">
+      <h3>Calculation History</h3>
+      <button (click)="loadHistory()" class="secondary-button">Load History</button>
+      
+      <div *ngIf="history.length > 0" class="history-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Operation</th>
+              <th>Operand 1</th>
+              <th>Operand 2</th>
+              <th>Result</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let calc of history">
+              <td>{{ calc.operation }}</td>
+              <td>{{ calc.operand1 }}</td>
+              <td>{{ calc.operand2 }}</td>
+              <td><strong>{{ calc.result | number:'1.0-2' }}</strong></td>
+              <td>{{ calc.created_at | date:'short' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
