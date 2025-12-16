@@ -24,20 +24,17 @@ export class AuthService {
   public currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(private http: HttpClient) {
-    // Dynamically build API URL based on current hostname
+    // Dynamically build API URL based on current environment
     const hostname = window.location.hostname;
-    const port = 8000;
     
     if (hostname === 'localhost' || hostname === '127.0.0.1') {
-      // Local development - use direct localhost
-      this.apiUrl = `http://localhost:${port}/api/auth`;
+      // Local development - use direct localhost backend
+      this.apiUrl = `http://localhost:8000/api/auth`;
     } else {
-      // GitHub Codespace or deployed environment
-      // Use relative protocol + hostname replacement to work through tunnel proxy
-      // Example: ubiquitous-waddle-v69grgqwjxq436gv5-4200.app.github.dev → ubiquitous-waddle-v69grgqwjxq436gv5-8000.app.github.dev
-      const baseHostname = hostname.replace(/-\d+\.app\.github\.dev$/, `-${port}.app.github.dev`);
-      // Use protocol-relative URL to respect current security context
-      this.apiUrl = `//${baseHostname}/api/auth`;
+      // GitHub Codespace: Use relative path proxy
+      // Frontend and backend in Codespace tunnel - use same origin for requests
+      // This way browser routes requests through Codespace's internal proxy
+      this.apiUrl = `/api/auth`;
     }
     
     console.log('Auth Service initialized with API URL:', this.apiUrl);
