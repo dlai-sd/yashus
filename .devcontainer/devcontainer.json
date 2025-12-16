@@ -1,0 +1,37 @@
+{
+  "name": "Yashus - AgentsHome & TheHunter",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bullseye",
+  "features": {
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.11"
+    }
+  },
+  "forwardPorts": [4200, 8000],
+  "portAttributes": {
+    "4200": {
+      "label": "Frontend - AgentsHome",
+      "onAutoForward": "notify",
+      "visibility": "public"
+    },
+    "8000": {
+      "label": "Backend - TheHunter API",
+      "onAutoForward": "notify",
+      "visibility": "public"
+    }
+  },
+  "postCreateCommand": "echo 'Codespace ready - Ports 4200 (Frontend) and 8000 (Backend) are public'",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.linting.enabled": true,
+        "python.linting.pylintEnabled": true
+      },
+      "extensions": [
+        "ms-vscode.vscode-typescript-tslint-plugin",
+        "Angular.ng-template",
+        "ms-python.python"
+      ]
+    }
+  }
+}
