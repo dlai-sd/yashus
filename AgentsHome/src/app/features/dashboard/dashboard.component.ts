@@ -27,7 +27,7 @@ interface Subscription {
 })
 export class DashboardComponent implements OnInit {
   currentUser: User | null = null;
-  sidebarOpen = true;
+  sidebarOpen = false; // Hide sidebar by default
   currentView = 'overview'; // overview, agents, leads, subscription, settings
   
   agents: Agent[] = [];
