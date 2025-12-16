@@ -1,0 +1,298 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "languageVersion": "2.0",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.39.26.7824",
+      "templateHash": "6979309607701472623"
+    }
+  },
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "eastus"
+    },
+    "environment": {
+      "type": "string",
+      "defaultValue": "staging"
+    },
+    "projectName": {
+      "type": "string",
+      "defaultValue": "the-hunter"
+    },
+    "dbAdminUsername": {
+      "type": "string",
+      "defaultValue": "hunter"
+    },
+    "dbAdminPassword": {
+      "type": "securestring"
+    },
+    "secretKey": {
+      "type": "securestring"
+    }
+  },
+  "variables": {
+    "resourceGroupName": "[format('{0}-{1}', parameters('projectName'), parameters('environment'))]",
+    "registryName": "[format('{0}registry', parameters('projectName'))]",
+    "dbServerName": "[format('{0}-db-{1}', parameters('projectName'), parameters('environment'))]",
+    "dbName": "the_hunter",
+    "apiContainerName": "[format('{0}-api-{1}', parameters('projectName'), parameters('environment'))]",
+    "frontendContainerName": "[format('{0}-frontend-{1}', parameters('projectName'), parameters('environment'))]",
+    "tags": {
+      "project": "[parameters('projectName')]",
+      "environment": "[parameters('environment')]",
+      "managedBy": "bicep"
+    }
+  },
+  "resources": {
+    "containerRegistry": {
+      "type": "Microsoft.ContainerRegistry/registries",
+      "apiVersion": "2023-01-01-preview",
+      "name": "[variables('registryName')]",
+      "location": "[parameters('location')]",
+      "tags": "[variables('tags')]",
+      "sku": {
+        "name": "Basic"
+      },
+      "properties": {
+        "adminUserEnabled": true,
+        "publicNetworkAccess": "Enabled"
+      }
+    },
+    "postgresServer": {
+      "type": "Microsoft.DBforPostgreSQL/flexibleServers",
+      "apiVersion": "2023-12-01-preview",
+      "name": "[variables('dbServerName')]",
+      "location": "[parameters('location')]",
+      "tags": "[variables('tags')]",
+      "sku": {
+        "name": "Standard_B1ms",
+        "tier": "Burstable"
+      },
+      "properties": {
+        "administratorLogin": "[parameters('dbAdminUsername')]",
+        "administratorLoginPassword": "[parameters('dbAdminPassword')]",
+        "version": "15",
+        "storage": {
+          "storageSizeGB": 32
+        },
+        "backup": {
+          "backupRetentionDays": 7,
+          "geoRedundantBackup": "Disabled"
+        },
+        "network": {
+          "delegatedSubnetResourceId": "",
+          "privateDnsZoneArmResourceId": ""
+        },
+        "highAvailability": {
+          "mode": "Disabled"
+        }
+      }
+    },
+    "postgresFirewallRule": {
+      "type": "Microsoft.DBforPostgreSQL/flexibleServers/firewallRules",
+      "apiVersion": "2023-12-01-preview",
+      "name": "[format('{0}/{1}', variables('dbServerName'), 'AllowAllAzureIps')]",
+      "properties": {
+        "startIpAddress": "0.0.0.0",
+        "endIpAddress": "255.255.255.255"
+      },
+      "dependsOn": [
+        "postgresServer"
+      ]
+    },
+    "database": {
+      "type": "Microsoft.DBforPostgreSQL/flexibleServers/databases",
+      "apiVersion": "2023-12-01-preview",
+      "name": "[format('{0}/{1}', variables('dbServerName'), variables('dbName'))]",
+      "properties": {
+        "charset": "UTF8",
+        "collation": "en_US.utf8"
+      },
+      "dependsOn": [
+        "postgresServer"
+      ]
+    },
+    "apiContainer": {
+      "type": "Microsoft.ContainerInstance/containerGroups",
+      "apiVersion": "2023-05-01",
+      "name": "[variables('apiContainerName')]",
+      "location": "[parameters('location')]",
+      "tags": "[variables('tags')]",
+      "properties": {
+        "containers": [
+          {
+            "name": "[variables('apiContainerName')]",
+            "properties": {
+              "image": "[format('{0}/the-hunter-api:latest', reference('containerRegistry').loginServer)]",
+              "resources": {
+                "requests": {
+                  "cpu": 1,
+                  "memoryInGB": 1
+                }
+              },
+              "ports": [
+                {
+                  "port": 8000,
+                  "protocol": "TCP"
+                }
+              ],
+              "environmentVariables": [
+                {
+                  "name": "DATABASE_URL",
+                  "secureValue": "[format('postgresql://{0}:{1}@{2}/{3}', parameters('dbAdminUsername'), parameters('dbAdminPassword'), reference('postgresServer').fullyQualifiedDomainName, variables('dbName'))]"
+                },
+                {
+                  "name": "SECRET_KEY",
+                  "secureValue": "[parameters('secretKey')]"
+                },
+                {
+                  "name": "DEBUG",
+                  "value": "false"
+                },
+                {
+                  "name": "LOG_LEVEL",
+                  "value": "info"
+                },
+                {
+                  "name": "ALLOWED_ORIGINS",
+                  "value": "[format('http://localhost:4200,http://localhost:3000,https://{0}.{1}.azurecontainers.io', variables('frontendContainerName'), parameters('location'))]"
+                }
+              ]
+            }
+          }
+        ],
+        "osType": "Linux",
+        "restartPolicy": "Always",
+        "ipAddress": {
+          "type": "Public",
+          "dnsNameLabel": "[variables('apiContainerName')]",
+          "ports": [
+            {
+              "port": 8000,
+              "protocol": "TCP"
+            }
+          ]
+        },
+        "imageRegistryCredentials": [
+          {
+            "server": "[reference('containerRegistry').loginServer]",
+            "username": "[listCredentials('containerRegistry', '2023-01-01-preview').username]",
+            "password": "[listCredentials('containerRegistry', '2023-01-01-preview').passwords[0].value]"
+          }
+        ]
+      },
+      "dependsOn": [
+        "containerRegistry",
+        "postgresServer"
+      ]
+    },
+    "frontendContainer": {
+      "type": "Microsoft.ContainerInstance/containerGroups",
+      "apiVersion": "2023-05-01",
+      "name": "[variables('frontendContainerName')]",
+      "location": "[parameters('location')]",
+      "tags": "[variables('tags')]",
+      "properties": {
+        "containers": [
+          {
+            "name": "[variables('frontendContainerName')]",
+            "properties": {
+              "image": "[format('{0}/the-hunter-frontend:latest', reference('containerRegistry').loginServer)]",
+              "resources": {
+                "requests": {
+                  "cpu": 1,
+                  "memoryInGB": 1
+                }
+              },
+              "ports": [
+                {
+                  "port": 80,
+                  "protocol": "TCP"
+                }
+              ],
+              "environmentVariables": [
+                {
+                  "name": "API_BASE_URL",
+                  "value": "[format('http://{0}:8000', reference('apiContainer').ipAddress.fqdn)]"
+                }
+              ]
+            }
+          }
+        ],
+        "osType": "Linux",
+        "restartPolicy": "Always",
+        "ipAddress": {
+          "type": "Public",
+          "dnsNameLabel": "[variables('frontendContainerName')]",
+          "ports": [
+            {
+              "port": 80,
+              "protocol": "TCP"
+            }
+          ]
+        },
+        "imageRegistryCredentials": [
+          {
+            "server": "[reference('containerRegistry').loginServer]",
+            "username": "[listCredentials('containerRegistry', '2023-01-01-preview').username]",
+            "password": "[listCredentials('containerRegistry', '2023-01-01-preview').passwords[0].value]"
+          }
+        ]
+      },
+      "dependsOn": [
+        "apiContainer",
+        "containerRegistry"
+      ]
+    }
+  },
+  "outputs": {
+    "registryLoginServer": {
+      "type": "string",
+      "value": "[reference('containerRegistry').loginServer]"
+    },
+    "registryUsername": {
+      "type": "string",
+      "value": "[listCredentials('containerRegistry', '2023-01-01-preview').username]"
+    },
+    "registryPassword": {
+      "type": "securestring",
+      "value": "[listCredentials('containerRegistry', '2023-01-01-preview').passwords[0].value]"
+    },
+    "databaseHost": {
+      "type": "string",
+      "value": "[reference('postgresServer').fullyQualifiedDomainName]"
+    },
+    "databaseConnectionString": {
+      "type": "string",
+      "value": "[format('postgresql://{0}:{1}@{2}/{3}', parameters('dbAdminUsername'), parameters('dbAdminPassword'), reference('postgresServer').fullyQualifiedDomainName, variables('dbName'))]"
+    },
+    "apiUrl": {
+      "type": "string",
+      "value": "[format('http://{0}:8000', reference('apiContainer').ipAddress.fqdn)]"
+    },
+    "frontendUrl": {
+      "type": "string",
+      "value": "[format('http://{0}', reference('frontendContainer').ipAddress.fqdn)]"
+    },
+    "summary": {
+      "type": "object",
+      "value": {
+        "resourceGroup": "[variables('resourceGroupName')]",
+        "location": "[parameters('location')]",
+        "environment": "[parameters('environment')]",
+        "registryLoginServer": "[reference('containerRegistry').loginServer]",
+        "registryUsername": "[listCredentials('containerRegistry', '2023-01-01-preview').username]",
+        "databaseHost": "[reference('postgresServer').fullyQualifiedDomainName]",
+        "databaseName": "[variables('dbName')]",
+        "databaseUser": "[parameters('dbAdminUsername')]",
+        "apiContainerName": "[variables('apiContainerName')]",
+        "apiUrl": "[format('http://{0}:8000', reference('apiContainer').ipAddress.fqdn)]",
+        "frontendContainerName": "[variables('frontendContainerName')]",
+        "frontendUrl": "[format('http://{0}', reference('frontendContainer').ipAddress.fqdn)]"
+      }
+    }
+  }
+}

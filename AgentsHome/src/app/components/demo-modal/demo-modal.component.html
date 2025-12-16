@@ -1,0 +1,22 @@
+<div class="modal-overlay" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <button class="modal-close" (click)="closeModal()">✕</button>
+    
+    <h2>The Hunter Demo</h2>
+    <p class="modal-subtitle">See how our lead generation agent works in 2 minutes</p>
+
+    <div class="video-container">
+      <iframe 
+        [src]="youtubeUrl" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <div class="demo-cta">
+      <button class="btn-primary" (click)="closeModal()">Start Free Trial</button>
+      <button class="btn-outline" (click)="closeModal()">Schedule Demo Call</button>
+    </div>
+  </div>
+</div>

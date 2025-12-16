@@ -1,0 +1,56 @@
+.hero {
+  background: linear-gradient(135deg, var(--primary-blue) 0%, rgba(30, 64, 175, 0.8) 100%);
+  color: var(--white);
+  padding: 100px 20px;
+  text-align: center;
+
+  @media (max-width: 768px) {
+    padding: 60px 20px;
+  }
+
+  .hero-content {
+    max-width: 700px;
+    margin: 0 auto;
+
+    h1 {
+      font-size: 52px;
+      margin-bottom: 20px;
+      line-height: 1.2;
+
+      @media (max-width: 768px) {
+        font-size: 32px;
+      }
+    }
+
+    p {
+      font-size: 18px;
+      margin-bottom: 40px;
+      opacity: 0.95;
+      line-height: 1.8;
+
+      @media (max-width: 768px) {
+        font-size: 16px;
+      }
+    }
+  }
+}
+
+.hero-cta {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  button {
+    @media (max-width: 768px) {
+      width: 100%;
+    }
+  }
+}
+
+.brand-highlight {
+  font-size: 1.2em;
+  font-weight: 900;
+  font-style: italic;
+  color: inherit;
+}

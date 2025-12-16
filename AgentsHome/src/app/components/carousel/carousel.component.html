@@ -1,0 +1,36 @@
+<section class="carousel-section">
+  <div class="container">
+    <h2>Perfect For Your Industry</h2>
+    <p class="section-subtitle">AI agents that deliver results across every industry segment</p>
+    
+    <div class="carousel">
+      <div class="carousel-items-wrapper">
+        <div class="carousel-item" *ngFor="let item of visibleItems">
+          <div class="item-image-container" *ngIf="item.image">
+            <img [src]="item.image" [alt]="item.title" class="item-image" />
+          </div>
+          <div class="item-icon">{{ item.icon }}</div>
+          <h3>{{ item.title }}</h3>
+          <ul class="benefits-list">
+            <li *ngFor="let benefit of item.benefits">{{ benefit }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="carousel-controls">
+      <button class="carousel-btn prev" (click)="prevSlide()">❮</button>
+      
+      <div class="carousel-dots">
+        <button 
+          *ngFor="let i of [].constructor(getTotalSlides()); let index = index"
+          class="dot"
+          [class.active]="index === getCurrentSlide()"
+          (click)="goToSlide(index)">
+        </button>
+      </div>
+
+      <button class="carousel-btn next" (click)="nextSlide()">❯</button>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,72 @@
+<div class="modal-overlay" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <button class="modal-close" (click)="closeModal()">✕</button>
+    
+    <h2>Login to Your Account</h2>
+    <p class="modal-subtitle">Access your agents dashboard and manage subscriptions</p>
+
+    <!-- TEST MODE: Input fields suppressed for test cycles -->
+    <div class="test-mode-notice">
+      <p class="notice-text">📋 <strong>Test Mode Active</strong> - Use the Test Login button below</p>
+    </div>
+
+    <!-- Hidden form for manual entry (suppressed) -->
+    <form (ngSubmit)="onSubmit()" style="display: none;">
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input 
+          id="email"
+          type="email" 
+          [(ngModel)]="email"
+          name="email"
+          placeholder="you@company.com"
+          required
+          [disabled]="isLoading"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="password-input">
+          <input 
+            id="password"
+            [type]="showPassword ? 'text' : 'password'" 
+            [(ngModel)]="password"
+            name="password"
+            placeholder="Enter your password"
+            required
+            [disabled]="isLoading"
+          />
+          <button 
+            type="button" 
+            class="toggle-password"
+            (click)="togglePasswordVisibility()"
+            [disabled]="isLoading">
+            {{ showPassword ? '👁️' : '👁️‍🗨️' }}
+          </button>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary" [disabled]="isLoading || !email || !password">
+        {{ isLoading ? 'Logging in...' : 'Login' }}
+      </button>
+    </form>
+
+    <!-- TEST LOGIN BUTTON -->
+    <button 
+      type="button" 
+      class="btn-test-login" 
+      (click)="testLogin()"
+      [disabled]="isLoading">
+      {{ isLoading ? 'Authenticating Test Account...' : '🚀 Test Login (Auto-Fill)' }}
+    </button>
+
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+
+    <p class="modal-footer">
+      Test Account: <code>test&#64;agentshome.com</code> | Password: <code>TestPassword123</code>
+    </p>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+# Angular
+/dist/
+/node_modules/
+/.angular/
+/.vscode/
+*.log
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment
+.env
+.env.local
+
+# Testing
+/coverage/
+
+# Build
+/out-tsc/

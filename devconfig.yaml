@@ -1,0 +1,368 @@
+# The Hunter - Development Configuration
+# Single source of truth for all services, build configurations, and deployment settings
+# This config drives both local development (docker-compose) and CI/CD pipelines
+
+version: '1.0'
+project_name: 'the-hunter'
+description: 'The Hunter - Intelligent Business Discovery Platform'
+
+# Global settings
+global:
+  registry: 'thehunterregistry.azurecr.io'
+  image_prefix: 'the-hunter'
+  docker_network: 'hunter-network'
+  
+# Environment configurations
+environments:
+  local:
+    registry: ''  # Use local builds
+    image_prefix: ''
+    env_file: '.env.local'
+  
+  staging:
+    registry: 'thehunterregistry.azurecr.io'
+    image_prefix: 'the-hunter'
+    env_file: '.env.staging'
+  
+  production:
+    registry: 'thehunterregistry.azurecr.io'
+    image_prefix: 'the-hunter'
+    env_file: '.env.production'
+
+# Service definitions
+services:
+  # Frontend Service - Angular 17 SPA
+  frontend:
+    name: 'frontend'
+    type: 'node'
+    description: 'Angular 17 Single Page Application'
+    enabled: true
+    
+    # Build configuration
+    build:
+      context: 'TheHunter/frontend'
+      dockerfile: 'Dockerfile'
+      target: 'production'
+      args:
+        NODE_ENV: 'production'
+        NPM_REGISTRY: 'https://registry.npmjs.org'
+      cache_from:
+        - 'thehunterregistry.azurecr.io/the-hunter-frontend:latest'
+    
+    # Image configuration
+    image:
+      local: 'the-hunter-frontend:latest'
+      registry: 'thehunterregistry.azurecr.io/the-hunter-frontend'
+      tags:
+        - 'latest'
+        - '{commit_sha}'
+        - '{version}'
+    
+    # Port mappings
+    ports:
+      local: '4200:80'
+      staging: '80:80'
+      production: '443:443'
+    
+    # Volumes (local dev only)
+    volumes_dev:
+      - './TheHunter/frontend/src:/app/src:cached'
+      - './TheHunter/frontend/public:/app/public:cached'
+    
+    # Environment variables
+    env_vars:
+      API_BASE_URL: 'http://api:8000'
+      LOG_LEVEL: 'info'
+      CACHE_BUST: 'true'
+    
+    # Health check
+    healthcheck:
+      endpoint: 'http://localhost:4200'
+      interval: '30s'
+      timeout: '10s'
+      retries: 3
+      start_period: '40s'
+    
+    # Dependencies
+    depends_on:
+      - backend
+    
+    # Optimization tags for CI/CD
+    watch_paths:
+      - 'TheHunter/frontend/src/**'
+      - 'TheHunter/frontend/package.json'
+      - 'TheHunter/frontend/Dockerfile'
+    
+    deployment:
+      memory: '128Mi'
+      cpu: '100m'
+      replicas: 1
+
+  # Backend Service - FastAPI
+  backend:
+    name: 'backend'
+    type: 'python'
+    description: 'FastAPI REST API and business logic'
+    enabled: true
+    
+    # Build configuration
+    build:
+      context: 'TheHunter/backend'
+      dockerfile: 'Dockerfile'
+      target: 'production'
+      args:
+        PYTHON_VERSION: '3.11'
+        PIP_INDEX_URL: 'https://pypi.org/simple'
+      cache_from:
+        - 'thehunterregistry.azurecr.io/the-hunter-api:latest'
+    
+    # Image configuration
+    image:
+      local: 'the-hunter-api:latest'
+      registry: 'thehunterregistry.azurecr.io/the-hunter-api'
+      tags:
+        - 'latest'
+        - '{commit_sha}'
+        - '{version}'
+    
+    # Port mappings
+    ports:
+      local: '8000:8000'
+      staging: '8000:8000'
+      production: '443:443'
+    
+    # Volumes (local dev only)
+    volumes_dev:
+      - './TheHunter/backend/app:/app/app:cached'
+      - './TheHunter/backend/tests:/app/tests:cached'
+    
+    # Environment variables
+    env_vars:
+      DATABASE_URL: 'postgresql://hunter:hunter@db:5432/the_hunter'
+      DEBUG: 'false'
+      LOG_LEVEL: 'info'
+      ALLOWED_ORIGINS: 'http://localhost:4200,http://localhost:3000'
+      SECRET_KEY: '${SECRET_KEY}'
+    
+    # Health check
+    healthcheck:
+      endpoint: 'http://localhost:8000/api/v1/calculator/health'
+      interval: '30s'
+      timeout: '10s'
+      retries: 3
+      start_period: '30s'
+    
+    # Dependencies
+    depends_on:
+      - database
+    
+    # Optimization tags for CI/CD
+    watch_paths:
+      - 'TheHunter/backend/app/**'
+      - 'TheHunter/backend/requirements.txt'
+      - 'TheHunter/backend/Dockerfile'
+    
+    deployment:
+      memory: '256Mi'
+      cpu: '200m'
+      replicas: 1
+
+  # Database Service - PostgreSQL
+  database:
+    name: 'database'
+    type: 'postgresql'
+    description: 'PostgreSQL database for data persistence'
+    enabled: true
+    
+    # Image configuration (no build needed - use official image)
+    image:
+      name: 'postgres'
+      version: '15-alpine'
+      local: 'postgres:15-alpine'
+      registry: 'postgres'
+    
+    # Port mappings
+    ports:
+      local: '5432:5432'
+      staging: '5432:5432'
+      production: '5432:5432'
+    
+    # Volumes
+    volumes:
+      persistent:
+        - 'postgres_data:/var/lib/postgresql/data'
+    
+    # Environment variables
+    env_vars:
+      POSTGRES_USER: 'hunter'
+      POSTGRES_PASSWORD: '${DB_PASSWORD}'
+      POSTGRES_DB: 'the_hunter'
+    
+    # Health check
+    healthcheck:
+      command: 'pg_isready -U hunter -d the_hunter'
+      interval: '10s'
+      timeout: '5s'
+      retries: 5
+      start_period: '10s'
+    
+    # No dependencies
+    depends_on: []
+    
+    # Database doesn't trigger CI/CD rebuilds
+    build_required: false
+    
+    deployment:
+      memory: '512Mi'
+      cpu: '250m'
+      replicas: 1
+
+# Volumes definition (for docker-compose)
+volumes:
+  postgres_data:
+    driver: 'local'
+
+# Networks definition (for docker-compose)
+networks:
+  hunter-network:
+    driver: 'bridge'
+
+# Build pipeline configuration
+build_pipeline:
+  # Change detection strategy
+  change_detection:
+    enabled: true
+    strategy: 'path-based'  # Watch service directories for changes
+    cache_key_prefix: 'build-cache'
+  
+  # Build order (dependencies)
+  order:
+    - 'database'      # No build, but listed for completeness
+    - 'backend'       # Build after DB config ready
+    - 'frontend'      # Build after backend is available
+  
+  # Build flags
+  flags:
+    parallel: true           # Build services in parallel where possible
+    cache: true              # Use Docker layer caching
+    squash: false            # Don't squash layers (preserve cache)
+    no_cache_on_ci: false    # Use cache in CI (safe with hash detection)
+
+# CI/CD Pipeline configuration
+cicd:
+  # Only trigger when these services change
+  build_triggers:
+    backend:
+      paths:
+        - 'TheHunter/backend/**'
+        - '.github/workflows/**'
+      skip_on:
+        - '*.md'
+        - 'docs/**'
+    
+    frontend:
+      paths:
+        - 'TheHunter/frontend/**'
+        - '.github/workflows/**'
+      skip_on:
+        - '*.md'
+        - 'docs/**'
+    
+    database:
+      # Database migrations tracked separately if needed
+      enabled: false
+  
+  # Manual trigger requirement
+  trigger_type: 'manual'  # workflow_dispatch in GitHub Actions
+  
+  # Stages
+  stages:
+    - name: 'test'
+      description: 'Run tests for changed services'
+      parallel: true
+    
+    - name: 'code-quality'
+      description: 'Lint and security scans'
+      parallel: true
+    
+    - name: 'build'
+      description: 'Build Docker images for changed services'
+      parallel: true
+    
+    - name: 'push'
+      description: 'Push to Azure Container Registry'
+      parallel: false
+    
+    - name: 'deploy'
+      description: 'Deploy to target environment'
+      parallel: false
+    
+    - name: 'verify'
+      description: 'Smoke tests and health checks'
+      parallel: true
+
+# Testing configuration
+testing:
+  backend:
+    framework: 'pytest'
+    command: 'pytest tests/ -v --cov=app'
+    paths:
+      - 'TheHunter/backend/tests/**'
+  
+  frontend:
+    framework: 'karma'
+    command: 'ng test --browsers=ChromeHeadless --watch=false'
+    paths:
+      - 'TheHunter/frontend/src/**/*.spec.ts'
+
+# Code quality configuration
+quality:
+  backend:
+    tools:
+      - name: 'flake8'
+        command: 'flake8 app/'
+      - name: 'pylint'
+        command: 'pylint app/'
+  
+  frontend:
+    tools:
+      - name: 'eslint'
+        command: 'ng lint'
+      - name: 'prettier'
+        command: 'prettier --check src/'
+
+# Deployment configuration
+deployment:
+  environments:
+    staging:
+      azure_resource_group: 'the-hunter-staging'
+      api_app_service: 'the-hunter-api-staging'
+      frontend_app_service: 'the-hunter-frontend-staging'
+      database_server: 'the-hunter-db-staging'
+      auto_deploy: false  # Manual approval required
+    
+    production:
+      azure_resource_group: 'the-hunter-production'
+      api_app_service: 'the-hunter-api-prod'
+      frontend_app_service: 'the-hunter-frontend-prod'
+      database_server: 'the-hunter-db-prod'
+      auto_deploy: false  # Manual approval required
+
+# Local development helpers
+dev_helpers:
+  startup_order:
+    - 'database'
+    - 'backend'
+    - 'frontend'
+  
+  startup_wait_times:
+    database: 10  # seconds
+    backend: 15   # seconds
+    frontend: 20  # seconds
+
+# Metadata
+metadata:
+  version: '1.0'
+  created: '2025-12-13'
+  owner: 'DevOps Team'
+  documentation: 'See DEV_CONFIG_GUIDE.md'

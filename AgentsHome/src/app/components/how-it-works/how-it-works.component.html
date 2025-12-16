@@ -1,0 +1,15 @@
+<section class="how-it-works" id="how-it-works">
+  <div class="container">
+    <h2>How It Works</h2>
+    <p class="section-subtitle">From signup to automation in 4 simple steps</p>
+
+    <div class="steps-grid">
+      <div class="step" *ngFor="let step of steps">
+        <div class="step-number">{{ step.number }}</div>
+        <div class="step-icon">{{ step.icon }}</div>
+        <h3>{{ step.title }}</h3>
+        <p>{{ step.description }}</p>
+      </div>
+    </div>
+  </div>
+</section>

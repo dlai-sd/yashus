@@ -1,0 +1,22 @@
+# TheHunter Deployment Information
+# Generated: Sat Dec 13 16:24:50 UTC 2025
+
+RESOURCE_GROUP=yashus
+LOCATION=eastus
+SUBSCRIPTION_ID=72c36f52-fba9-40f9-96ea-6724f8ed0d8a
+REGISTRY=yashusregistry.azurecr.io
+
+## Containers
+BACKEND_CONTAINER=yashus-backend
+BACKEND_IMAGE=yashusregistry.azurecr.io/the-hunter-backend:latest
+BACKEND_URL=http://yashus-backend-api.eastus.azurecontainer.io:8000
+
+FRONTEND_CONTAINER=yashus-frontend
+FRONTEND_IMAGE=yashusregistry.azurecr.io/the-hunter-frontend:latest
+FRONTEND_URL=http://yashus-calculator.eastus.azurecontainer.io
+
+## Quick Commands
+# Check backend logs: az container logs --resource-group yashus --name yashus-backend
+# Check frontend logs: az container logs --resource-group yashus --name yashus-frontend
+# Delete all: ./azure/deploy.sh --delete
+# Update: ./azure/deploy.sh --update

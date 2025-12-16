@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    container_name: hunter-db
+    environment:
+      POSTGRES_USER: hunter
+      POSTGRES_PASSWORD: hunter_password
+      POSTGRES_DB: hunter_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hunter"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - hunter-network
+
+  # Backend API
+  api:
+    build:
+      context: ./TheHunter/backend
+      dockerfile: Dockerfile
+    container_name: hunter-api
+    environment:
+      DATABASE_URL: postgresql://hunter:hunter_password@db:5432/hunter_db
+      ALLOWED_ORIGINS: "http://localhost:4200,http://localhost:3000"
+      DEBUG: "false"
+      SECRET_KEY: "your-secret-key-change-in-production"
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./TheHunter/backend:/app
+    networks:
+      - hunter-network
+    command: >
+      sh -c "
+        pip install -r requirements.txt &&
+        uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+      "
+
+  # Frontend
+  frontend:
+    build:
+      context: ./TheHunter/frontend
+      dockerfile: Dockerfile
+    container_name: hunter-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - api
+    networks:
+      - hunter-network
+
+volumes:
+  postgres_data:
+
+networks:
+  hunter-network:
+    driver: bridge

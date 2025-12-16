@@ -1,0 +1,46 @@
+<section class="agents-section" id="agents">
+  <div class="container">
+    <div class="section-header">
+      <h2>Meet Your Digital Agents</h2>
+      <p class="section-subtitle">AI-powered agents that work 24/7 to grow your business</p>
+    </div>
+
+    <div class="agents-grid">
+      <div class="agent-card" *ngFor="let agent of agents" [class.coming-soon]="agent.status === 'coming-soon'" [class.with-image]="agent.image">
+        <div class="agent-image-container" *ngIf="agent.image">
+          <img [src]="agent.image" [alt]="agent.name" class="agent-image" />
+          <div class="agent-status live" *ngIf="agent.status === 'live'">Live Now</div>
+          <div class="agent-status coming-soon-badge" *ngIf="agent.status === 'coming-soon'">Coming Soon</div>
+        </div>
+        <div class="agent-header">
+          <div class="agent-icon-wrapper" *ngIf="!agent.image">
+            <div class="agent-icon">{{ agent.icon }}</div>
+          </div>
+          <div class="agent-meta">
+            <h3>{{ agent.name }} <span class="agent-role-title">→ {{ agent.role }}</span></h3>
+          </div>
+        </div>
+
+        <p class="agent-role" *ngIf="!agent.image">{{ agent.role }}</p>
+
+        <div class="agent-includes">
+          <h4>Includes</h4>
+          <ul>
+            <li *ngFor="let item of agent.includes">✓ {{ item }}</li>
+          </ul>
+        </div>
+
+        <button 
+          *ngIf="agent.status === 'coming-soon'" 
+          class="btn-notify">
+          Notify Me
+        </button>
+        <button 
+          *ngIf="agent.status === 'live'" 
+          class="btn-primary">
+          Get Started
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

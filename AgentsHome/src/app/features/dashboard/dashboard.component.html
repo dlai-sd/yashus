@@ -1,0 +1,56 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <div class="header-content">
+      <h1>Welcome to Your Dashboard</h1>
+      <p *ngIf="currentUser" class="user-greeting">Hello, {{ currentUser.name }}!</p>
+    </div>
+    <button (click)="logout()" class="btn-logout">Logout</button>
+  </div>
+
+  <div class="dashboard-grid">
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h2>Overview</h2>
+      </div>
+      <div class="card-content">
+        <p>Your agents dashboard overview will appear here.</p>
+      </div>
+    </div>
+
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h2>Active Agents</h2>
+      </div>
+      <div class="card-content">
+        <p>Manage and monitor your active agents.</p>
+      </div>
+    </div>
+
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h2>Leads</h2>
+      </div>
+      <div class="card-content">
+        <p>Track and manage your leads.</p>
+      </div>
+    </div>
+
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h2>Subscription</h2>
+      </div>
+      <div class="card-content">
+        <p>View and manage your subscription plan.</p>
+      </div>
+    </div>
+
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h2>Settings</h2>
+      </div>
+      <div class="card-content">
+        <p>Configure your account settings.</p>
+      </div>
+    </div>
+  </div>
+</div>

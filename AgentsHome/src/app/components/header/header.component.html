@@ -1,0 +1,27 @@
+<header class="header">
+  <div class="container">
+    <div class="header-content">
+      <div class="logo">
+        <img src="assets/images/yashus-logo.png" alt="Yashus" />
+      </div>
+
+      <nav class="nav" [class.mobile-open]="mobileMenuOpen">
+        <a href="#agents" (click)="closeMenus()">Agents</a>
+        <a href="#how-it-works" (click)="closeMenus()">How It Works</a>
+        <a href="#pricing" (click)="closeMenus()">Pricing</a>
+        <a href="#faq" (click)="closeMenus()">FAQ</a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="btn-signup" (click)="toggleSignupModal()">Sign Up</button>
+        <button class="btn-login" (click)="toggleLoginModal()">Login</button>
+      </div>
+
+      <button class="mobile-menu-toggle" (click)="toggleMobileMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+</header>

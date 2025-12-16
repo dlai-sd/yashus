@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yashus: AI Command Center</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        yashus: {
+                            blue: '#0B2447',
+                            light: '#19376D',
+                            orange: '#F97316',
+                            gray: '#F3F4F6',
+                            dark: '#051b3b'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Open Sans', 'sans-serif'],
+                        heading: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans h-screen flex flex-col md:flex-row overflow-hidden">
+
+    <aside class="w-full md:w-64 bg-yashus-blue text-white flex-shrink-0 flex flex-col h-auto md:h-screen z-20">
+        <div class="h-20 flex items-center px-6 border-b border-blue-900 bg-yashus-dark">
+            <img src="yd.png" alt="Yashus" class="h-8 w-auto">
+            <div class="ml-3 font-heading font-bold text-sm tracking-widest">COMMAND</div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-4 space-y-2">
+            <p class="text-xs font-bold text-blue-400 uppercase tracking-wider mb-2 px-2">Your Agents</p>
+            
+            <a href="#" class="flex items-center gap-3 p-3 rounded-lg bg-yashus-orange text-white shadow-md transform scale-105 border-l-4 border-white transition">
+                <div class="h-8 w-8 rounded-full bg-white/20 flex items-center justify-center">
+                    <i class="fas fa-crosshairs"></i>
+                </div>
+                <div>
+                    <p class="font-bold text-sm font-heading">The Hunter</p>
+                    <p class="text-[10px] text-orange-100">Outbound Sales</p>
+                </div>
+            </a>
+
+            <a href="#" class="flex items-center gap-3 p-3 rounded-lg hover:bg-yashus-light text-blue-200 transition opacity-60">
+                <div class="h-8 w-8 rounded-full bg-blue-800 flex items-center justify-center">
+                    <i class="fas fa-seedling"></i>
+                </div>
+                <div>
+                    <p class="font-bold text-sm font-heading">The Farmer</p>
+                    <p class="text-[10px] text-blue-400">Retention</p>
+                </div>
+                <i class="fas fa-lock text-xs ml-auto"></i>
+            </a>
+
+            <a href="#" class="flex items-center gap-3 p-3 rounded-lg hover:bg-yashus-light text-blue-200 transition opacity-60">
+                <div class="h-8 w-8 rounded-full bg-blue-800 flex items-center justify-center">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div>
+                    <p class="font-bold text-sm font-heading">The Guardian</p>
+                    <p class="text-[10px] text-blue-400">Reputation</p>
+                </div>
+                <i class="fas fa-lock text-xs ml-auto"></i>
+            </a>
+        </div>
+
+        <div class="p-4 border-t border-blue-900 bg-yashus-dark">
+            <div class="flex items-center gap-3">
+                <div class="h-10 w-10 rounded-full bg-blue-600 flex items-center justify-center font-bold text-sm">SK</div>
+                <div>
+                    <p class="text-sm font-bold">Sujay</p>
+                    <p class="text-xs text-blue-400">CEO / Admin</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-screen overflow-hidden relative">
+        
+        <div class="bg-white border-b border-gray-200 p-6 md:p-8 flex flex-col md:flex-row items-center md:items-start gap-6 shadow-sm z-10">
+            
+            <div class="relative group">
+                <div class="h-28 w-28 rounded-xl overflow-hidden border-4 border-yashus-orange shadow-2xl relative bg-gray-100">
+                    <img src="TheHunter.png" alt="The Hunter" class="h-full w-full object-cover">
+                </div>
+                <div class="absolute -bottom-2 -right-2 bg-green-500 h-6 w-6 rounded-full border-4 border-white flex items-center justify-center">
+                    <div class="h-2 w-2 bg-white rounded-full animate-pulse"></div>
+                </div>
+            </div>
+
+            <div class="flex-1 text-center md:text-left">
+                <div class="flex items-center justify-center md:justify-start gap-3 mb-1">
+                    <h1 class="text-3xl md:text-4xl font-heading font-extrabold text-yashus-blue uppercase tracking-tight">THE HUNTER</h1>
+                    <span class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-1 rounded border border-green-200 uppercase tracking-wide">System Online</span>
+                </div>
+                <p class="text-gray-500 text-sm md:text-base max-w-2xl">"I scan the digital horizon to find high-intent prospects before your competitors do."</p>
+                
+                <div class="flex gap-6 mt-4 justify-center md:justify-start">
+                    <div class="bg-blue-50 px-4 py-2 rounded border border-blue-100">
+                        <p class="text-[10px] text-gray-500 uppercase font-bold">Leads Found</p>
+                        <p class="text-xl font-bold text-yashus-blue">152</p>
+                    </div>
+                    <div class="bg-blue-50 px-4 py-2 rounded border border-blue-100">
+                        <p class="text-[10px] text-gray-500 uppercase font-bold">Drafts Ready</p>
+                        <p class="text-xl font-bold text-yashus-blue">48</p>
+                    </div>
+                    <div class="bg-orange-50 px-4 py-2 rounded border border-orange-100">
+                        <p class="text-[10px] text-gray-500 uppercase font-bold">Efficiency</p>
+                        <p class="text-xl font-bold text-yashus-orange">94%</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex gap-3">
+                <button class="bg-gray-100 hover:bg-gray-200 text-gray-600 px-4 py-2 rounded font-bold text-xs uppercase tracking-wide transition">
+                    <i class="fas fa-cog mr-1"></i> Config
+                </button>
+                <button class="bg-yashus-blue hover:bg-blue-900 text-white px-6 py-2 rounded shadow-lg font-bold text-xs uppercase tracking-wide transition transform hover:-translate-y-0.5">
+                    <i class="fas fa-pause mr-2"></i> Pause
+                </button>
+            </div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto bg-gray-50 p-6 md:p-8">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+                
+                <div class="bg-white rounded-xl shadow border border-gray-200 p-6 h-fit">
+                    <h2 class="font-heading font-bold text-lg text-gray-800 mb-6 pb-2 border-b border-gray-100 flex items-center">
+                        <i class="fas fa-terminal text-yashus-orange mr-3"></i> Issue Command
+                    </h2>
+                    
+                    <form class="space-y-5">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Target Niche</label>
+                            <input type="text" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded p-3 focus:border-yashus-orange focus:ring-1 outline-none" placeholder="e.g. Architects in Baner">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Instructions / Filters</label>
+                            <textarea rows="3" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded p-3 focus:border-yashus-orange focus:ring-1 outline-none" placeholder="Only companies with >10 employees. Ignore freelancers."></textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Delivery</label>
+                            <select class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded p-3 outline-none">
+                                <option>Google Sheets (Live Sync)</option>
+                                <option>CSV Download</option>
+                            </select>
+                        </div>
+
+                        <button type="button" class="w-full bg-yashus-orange text-white font-bold py-3 rounded hover:bg-orange-600 transition shadow-md flex items-center justify-center gap-2">
+                            <i class="fas fa-rocket"></i> LAUNCH HUNT
+                        </button>
+                    </form>
+                </div>
+
+                <div class="lg:col-span-2 space-y-6">
+                    
+                    <div class="bg-white rounded-xl shadow border border-gray-200 p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="font-heading font-bold text-gray-700">Live Operation Feed</h3>
+                            <div class="flex items-center gap-2">
+                                <span class="animate-pulse h-2 w-2 rounded-full bg-green-500"></span>
+                                <span class="text-xs font-bold text-green-600 uppercase">Processing</span>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="flex gap-4 items-start border-l-2 border-green-500 pl-4 bg-green-50/50 p-2 rounded-r">
+                                <div class="mt-1"><i class="fas fa-check-circle text-green-500"></i></div>
+                                <div>
+                                    <p class="text-sm font-bold text-gray-800">Identified "Apex Designs"</p>
+                                    <p class="text-xs text-gray-500">Found CEO Email • Validated domain</p>
+                                </div>
+                                <span class="ml-auto text-xs text-gray-400">Now</span>
+                            </div>
+                            <div class="flex gap-4 items-start border-l-2 border-blue-200 pl-4 p-2">
+                                <div class="mt-1 text-blue-400"><i class="fas fa-pen-fancy"></i></div>
+                                <div>
+                                    <p class="text-sm font-bold text-gray-800">Drafting Message for "Studio 9"</p>
+                                    <p class="text-xs text-gray-500">Context: "Saw recent award on website"</p>
+                                </div>
+                                <span class="ml-auto text-xs text-gray-400">2m ago</span>
+                            </div>
+                            <div class="flex gap-4 items-start border-l-2 border-gray-200 pl-4 p-2 opacity-60">
+                                <div class="mt-1 text-gray-400"><i class="fas fa-ban"></i></div>
+                                <div>
+                                    <p class="text-sm font-bold text-gray-600">Skipped "Freelancer Ravi"</p>
+                                    <p class="text-xs text-gray-500">Reason: No Website Found</p>
+                                </div>
+                                <span class="ml-auto text-xs text-gray-400">5m ago</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow border border-gray-200 overflow-hidden">
+                        <div class="px-6 py-4 border-b border-gray-200 bg-gray-50 flex justify-between">
+                            <h3 class="font-heading font-bold text-gray-700">Recent Missions</h3>
+                            <a href="#" class="text-xs text-yashus-blue font-bold hover:underline">View All</a>
+                        </div>
+                        <table class="w-full text-sm text-left text-gray-500">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-100">
+                                <tr>
+                                    <th class="px-6 py-3">Date</th>
+                                    <th class="px-6 py-3">Target</th>
+                                    <th class="px-6 py-3">Results</th>
+                                    <th class="px-6 py-3">Status</th>
+                                    <th class="px-6 py-3"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-white border-b hover:bg-gray-50">
+                                    <td class="px-6 py-4">Dec 12</td>
+                                    <td class="px-6 py-4 font-bold text-yashus-blue">Gyms (Kothrud)</td>
+                                    <td class="px-6 py-4">48 Leads</td>
+                                    <td class="px-6 py-4"><span class="bg-green-100 text-green-800 text-[10px] font-bold px-2 py-1 rounded">COMPLETE</span></td>
+                                    <td class="px-6 py-4 text-right"><i class="fas fa-download text-gray-400 cursor-pointer hover:text-yashus-orange"></i></td>
+                                </tr>
+                                <tr class="bg-white hover:bg-gray-50">
+                                    <td class="px-6 py-4">Dec 10</td>
+                                    <td class="px-6 py-4 font-bold text-yashus-blue">Dentists (Pune)</td>
+                                    <td class="px-6 py-4">152 Leads</td>
+                                    <td class="px-6 py-4"><span class="bg-green-100 text-green-800 text-[10px] font-bold px-2 py-1 rounded">COMPLETE</span></td>
+                                    <td class="px-6 py-4 text-right"><i class="fas fa-download text-gray-400 cursor-pointer hover:text-yashus-orange"></i></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>

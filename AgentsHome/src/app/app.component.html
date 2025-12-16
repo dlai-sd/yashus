@@ -1,0 +1,29 @@
+<div class="app-container">
+  <!-- Router outlet for dashboard and other routes -->
+  <router-outlet></router-outlet>
+
+  <!-- Landing page (shown when on home route and not authenticated) -->
+  <ng-container *ngIf="!isAuthenticated">
+    <app-header 
+      (openLogin)="toggleLoginModal()"
+      (openSignup)="toggleSignupModal()">
+    </app-header>
+    <app-hero 
+      (openSignup)="toggleSignupModal()">
+    </app-hero>
+    <app-agents></app-agents>
+    <app-how-it-works></app-how-it-works>
+    <app-carousel></app-carousel>
+    <app-faq></app-faq>
+    <app-footer></app-footer>
+  </ng-container>
+
+  <!-- Login Modal -->
+  <app-login-modal 
+    *ngIf="showLoginModal"
+    (close)="showLoginModal = false"
+    (onSuccess)="onAuthSuccess()">
+  </app-login-modal>
+
+  <!-- Signup Modal (if you have one) -->
+</div>

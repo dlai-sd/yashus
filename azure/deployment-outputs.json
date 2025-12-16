@@ -1,0 +1,5 @@
+WARNING: /workspaces/yashus/azure/main.bicep(48,34) : Warning outputs-should-not-contain-secrets: Outputs should not contain secrets. Found possible secret: function 'listCredentials' [https://aka.ms/bicep/linter-diagnostics#outputs-should-not-contain-secrets]
+/workspaces/yashus/azure/main.bicep(106,77) : Warning outputs-should-not-contain-secrets: Outputs should not contain secrets. Found possible secret: secure value 'dbAdminPassword' [https://aka.ms/bicep/linter-diagnostics#outputs-should-not-contain-secrets]
+/workspaces/yashus/azure/main.bicep(248,21) : Warning outputs-should-not-contain-secrets: Outputs should not contain secrets. Found possible secret: function 'listCredentials' [https://aka.ms/bicep/linter-diagnostics#outputs-should-not-contain-secrets]
+
+ERROR: Long-running operation wait cancelled.  

@@ -1,0 +1,33 @@
+<section class="results">
+  <div class="container">
+    <h2>Proven Results</h2>
+    <p class="section-subtitle">Real metrics from The Hunter agent in production</p>
+
+    <div class="metrics-grid">
+      <div class="metric-card" *ngFor="let metric of metrics">
+        <div class="metric-icon">{{ metric.icon }}</div>
+        <div class="metric-value">{{ metric.value }}</div>
+        <div class="metric-label">{{ metric.label }}</div>
+      </div>
+    </div>
+
+    <div class="roi-callout">
+      <h3>ROI Comparison</h3>
+      <div class="comparison">
+        <div class="option">
+          <h4>Traditional Sales</h4>
+          <p>₹50,000/month salary</p>
+          <p>20 leads/month</p>
+          <p>₹2,500 per lead</p>
+        </div>
+        <div class="vs">VS</div>
+        <div class="option highlight">
+          <h4>The Hunter Agent</h4>
+          <p>₹4,999/month subscription</p>
+          <p>1,500+ leads/month</p>
+          <p>₹3-4 per lead</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
