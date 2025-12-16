@@ -20,6 +20,30 @@ interface Subscription {
   status: 'active' | 'expired';
 }
 
+interface Release {
+  version: string;
+  date: string;
+  features: string[];
+}
+
+interface Feature {
+  title: string;
+  description: string;
+  isNew: boolean;
+}
+
+interface UnexploredFeature {
+  title: string;
+  description: string;
+  plan: string;
+  icon: string;
+}
+
+interface FAQItem {
+  question: string;
+  answer: string;
+}
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -47,6 +71,14 @@ export class DashboardComponent implements OnInit {
     { id: 'settings', label: 'Settings', icon: '⚙️' }
   ];
 
+  // Right panel data
+  upcomingReleases: Release[] = [];
+  currentReleaseFeatures: Feature[] = [];
+  unexploredFeatures: UnexploredFeature[] = [];
+  faqItems: FAQItem[] = [];
+  
+  expandedFAQIndex: number | null = null;
+
   constructor(
     private authService: AuthService,
     private router: Router
@@ -60,6 +92,7 @@ export class DashboardComponent implements OnInit {
     
     // Load mock data
     this.loadAgents();
+    this.loadRightPanelData();
   }
 
   loadAgents(): void {
@@ -95,6 +128,93 @@ export class DashboardComponent implements OnInit {
     ];
   }
 
+  loadRightPanelData(): void {
+    // Upcoming releases
+    this.upcomingReleases = [
+      {
+        version: '2.1',
+        date: 'Jan 2025',
+        features: ['Advanced Analytics', 'Custom Workflows']
+      },
+      {
+        version: '2.2',
+        date: 'Feb 2025',
+        features: ['AI Insights', 'Team Collaboration']
+      }
+    ];
+
+    // Current release features
+    this.currentReleaseFeatures = [
+      {
+        title: 'Smart Agent Creation',
+        description: 'AI-powered agent setup wizard',
+        isNew: true
+      },
+      {
+        title: 'Real-time Analytics',
+        description: 'Live performance monitoring dashboard',
+        isNew: true
+      },
+      {
+        title: 'API Integration',
+        description: 'Connect with external tools and services',
+        isNew: false
+      }
+    ];
+
+    // Unexplored features in subscription
+    this.unexploredFeatures = [
+      {
+        title: 'Advanced AI Training',
+        description: 'Custom model training for your specific use case',
+        plan: 'Enterprise',
+        icon: '🧠'
+      },
+      {
+        title: 'Priority Support',
+        description: '24/7 dedicated support team',
+        plan: 'Premium',
+        icon: '⭐'
+      },
+      {
+        title: 'White-label Solution',
+        description: 'Rebrand and resell agents to your clients',
+        plan: 'Enterprise',
+        icon: '🎨'
+      },
+      {
+        title: 'Advanced Reporting',
+        description: 'Custom reports and business intelligence',
+        plan: 'Premium',
+        icon: '📊'
+      }
+    ];
+
+    // FAQ items
+    this.faqItems = [
+      {
+        question: 'How do I create a new agent?',
+        answer: 'Click on the "Agents" tab in the sidebar, then click "Create New Agent". Follow the wizard to set up your agent configuration.'
+      },
+      {
+        question: 'What is the usage limit?',
+        answer: 'Your Pro plan allows 5 agents with 10,000 API calls per agent per month. Monitor your usage in the Overview dashboard.'
+      },
+      {
+        question: 'Can I upgrade my plan?',
+        answer: 'Yes! Visit the Subscription section to view upgrade options. Changes take effect immediately.'
+      },
+      {
+        question: 'How do I export my data?',
+        answer: 'Go to Settings > Data Export. You can export agent performance, leads, and conversations in CSV or JSON format.'
+      },
+      {
+        question: 'Is there API documentation?',
+        answer: 'Yes, comprehensive API docs are available at https://docs.agentshome.com with code examples in multiple languages.'
+      }
+    ];
+  }
+
   setView(viewId: string): void {
     this.currentView = viewId;
   }
@@ -116,5 +236,9 @@ export class DashboardComponent implements OnInit {
     if (percentage >= 80) return 'critical';
     if (percentage >= 50) return 'warning';
     return 'normal';
+  }
+
+  toggleFAQ(index: number): void {
+    this.expandedFAQIndex = this.expandedFAQIndex === index ? null : index;
   }
 }

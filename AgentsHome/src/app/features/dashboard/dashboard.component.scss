@@ -588,3 +588,292 @@
     display: block;
   }
 }
+
+// ============= RIGHT PANEL STYLES =============
+.right-panel {
+  width: 320px;
+  background: white;
+  border-left: 1px solid #e1e8ed;
+  overflow-y: auto;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.05);
+  
+  @media (max-width: 1200px) {
+    width: 280px;
+  }
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+}
+
+.panel-section {
+  padding: 24px;
+  border-bottom: 1px solid #f0f3ff;
+
+  &:first-child {
+    padding-top: 20px;
+  }
+}
+
+.panel-title {
+  margin: 0 0 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+// Release Cards
+.release-card {
+  background: #f9fafb;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-left: 3px solid #667eea;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.release-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.release-version {
+  font-size: 13px;
+  font-weight: 600;
+  color: #667eea;
+}
+
+.release-date {
+  font-size: 12px;
+  color: #999;
+}
+
+.release-features {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    font-size: 12px;
+    color: #666;
+    padding: 4px 0;
+    padding-left: 16px;
+    position: relative;
+
+    &:before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: #27ae60;
+      font-weight: 600;
+    }
+  }
+}
+
+// Feature Cards
+.feature-card {
+  background: #f9fafb;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-left: 3px solid #2ecc71;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.feature-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.badge-new {
+  display: inline-block;
+  background: #667eea;
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.feature-title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.feature-desc {
+  margin: 0;
+  font-size: 12px;
+  color: #666;
+  line-height: 1.4;
+}
+
+// Unexplored Features (Upgrade)
+.unexplored-card {
+  background: linear-gradient(135deg, #f0f3ff 0%, #f9fafb 100%);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px solid #e0e7ff;
+  text-align: center;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.unexplored-icon {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.unexplored-title {
+  margin: 0 0 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.unexplored-desc {
+  margin: 0 0 8px;
+  font-size: 11px;
+  color: #666;
+  line-height: 1.4;
+}
+
+.unexplored-plan {
+  display: inline-block;
+  background: #667eea;
+  color: white;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+// FAQ Styles
+.faq-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.faq-item {
+  border: 1px solid #e1e8ed;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &.open {
+    .faq-question {
+      background: #f0f3ff;
+      color: #667eea;
+    }
+
+    .faq-icon {
+      color: #667eea;
+    }
+  }
+}
+
+.faq-question {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  border: none;
+  padding: 12px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  color: #1a1a1a;
+  transition: all 0.2s ease;
+  text-align: left;
+
+  &:hover {
+    background: #f9fafb;
+  }
+}
+
+.faq-icon {
+  font-size: 16px;
+  color: #999;
+  transition: color 0.2s ease;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.faq-answer {
+  background: #fafbfc;
+  padding: 12px;
+  font-size: 12px;
+  color: #666;
+  line-height: 1.6;
+  border-top: 1px solid #e1e8ed;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+  }
+}
+
+// Documentation Section
+.documentation-section {
+  text-align: center;
+  background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+}
+
+.doc-text {
+  margin: 0 0 16px;
+  font-size: 12px;
+  color: #666;
+  line-height: 1.5;
+}
+
+.doc-link {
+  display: inline-block;
+  padding: 10px 16px;
+  background: #667eea;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #5568d3;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  }
+}
