@@ -4,6 +4,17 @@ from app.database import get_db
 
 router = APIRouter()
 
+# ============= CORS PREFLIGHT HANDLERS =============
+@router.options("/api/auth/login")
+async def options_login():
+    """Handle CORS preflight for login"""
+    return {}
+
+@router.options("/api/auth/signup")
+async def options_signup():
+    """Handle CORS preflight for signup"""
+    return {}
+
 # ============= AUTH ROUTES =============
 @router.post("/api/auth/login")
 async def login(credentials: dict):

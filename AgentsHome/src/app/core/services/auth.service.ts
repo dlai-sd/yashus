@@ -29,14 +29,15 @@ export class AuthService {
     const port = 8000;
     
     if (hostname === 'localhost' || hostname === '127.0.0.1') {
-      // Local development
+      // Local development - use direct localhost
       this.apiUrl = `http://localhost:${port}/api/auth`;
     } else {
       // GitHub Codespace or deployed environment
-      // Example: ubiquitous-waddle-v69grgqwjxq436gv5-4200.app.github.dev
-      // Replace -4200. with -8000.
+      // Use relative protocol + hostname replacement to work through tunnel proxy
+      // Example: ubiquitous-waddle-v69grgqwjxq436gv5-4200.app.github.dev → ubiquitous-waddle-v69grgqwjxq436gv5-8000.app.github.dev
       const baseHostname = hostname.replace(/-\d+\.app\.github\.dev$/, `-${port}.app.github.dev`);
-      this.apiUrl = `https://${baseHostname}/api/auth`;
+      // Use protocol-relative URL to respect current security context
+      this.apiUrl = `//${baseHostname}/api/auth`;
     }
     
     console.log('Auth Service initialized with API URL:', this.apiUrl);
